@@ -1,0 +1,21 @@
+<div class="step-content active" id="step-5">
+  <div class="step-header">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Choose Your Store Theme 🎨</h2>
+    <p class="text-gray-600">Select a design that matches your brand style</p>
+  </div>
+  <form [formGroup]="themeForm" (ngSubmit)="onSubmit()">
+    <div class="theme-selector grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+      <div *ngFor="let theme of themes"
+           class="theme-card border-2 rounded-lg p-4 cursor-pointer"
+           [ngClass]="{'border-indigo-600': themeForm.get('theme')?.value === theme.name, 'border-gray-200': themeForm.get('theme')?.value !== theme.name}"
+           (click)="selectTheme(theme.name)">
+        <div class="theme-preview h-24 bg-gray-200 rounded-md flex items-center justify-center text-4xl mb-3">{{ theme.icon }}</div>
+        <div class="theme-name font-semibold text-center">{{ theme.name }}</div>
+      </div>
+    </div>
+    <div class="button-group mt-8 flex space-x-3">
+      <button type="button" (click)="goBack()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold">Back</button>
+      <button type="submit" [disabled]="themeForm.invalid" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold disabled:bg-indigo-400">Create My Store</button>
+    </div>
+  </form>
+</div>

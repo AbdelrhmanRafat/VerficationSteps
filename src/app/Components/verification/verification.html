@@ -1,0 +1,24 @@
+<div class="step-content active" id="step-2">
+  <div class="step-header">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Verify Your Number 🔐</h2>
+    <p class="text-gray-600">We've sent a 6-digit code to your phone</p>
+  </div>
+  <form [formGroup]="verificationForm" (ngSubmit)="onSubmit()">
+    <div class="otp-inputs flex space-x-3 justify-center my-6" formArrayName="otp">
+      <input *ngFor="let control of otpControls; let i = index"
+             [formControlName]="i"
+             [id]="'otp-' + i"
+             type="text"
+             class="w-14 h-14 text-center text-2xl font-semibold border-2 border-gray-200 rounded-lg"
+             maxlength="1"
+             (keyup)="onKeyUp($event, i)">
+    </div>
+    <div class="resend-otp text-center text-gray-600">
+      Didn't receive the code? <a href="#" class="text-indigo-600 font-semibold">Resend in 30s</a>
+    </div>
+    <div class="button-group mt-8 flex space-x-3">
+      <button type="button" (click)="goBack()" class="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold">Back</button>
+      <button type="submit" [disabled]="verificationForm.invalid" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold disabled:bg-indigo-400">Verify Code</button>
+    </div>
+  </form>
+</div>

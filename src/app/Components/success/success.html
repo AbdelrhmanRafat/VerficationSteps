@@ -1,0 +1,32 @@
+<div class="step-content active" id="step-success">
+  <div class="success-container text-center py-10">
+    <div class="success-icon w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+      <span class="text-white text-4xl">✓</span>
+    </div>
+    <h2 class="success-title text-3xl font-bold text-gray-800 mb-4">Congratulations! 🎉</h2>
+    <p class="success-message text-gray-600 text-lg mb-8">Your store has been created successfully</p>
+
+    <div class="store-url bg-gray-100 p-4 rounded-lg font-semibold text-indigo-600 mb-6 inline-block">
+      {{ storeUrl }}
+    </div>
+
+    <div class="trial-info flex justify-center space-x-6 mb-8">
+      <div class="trial-item flex items-center space-x-2 text-gray-700">
+        <span class="trial-item-icon text-2xl">📦</span>
+        <span>500 Orders</span>
+      </div>
+      <div class="trial-item flex items-center space-x-2 text-gray-700">
+        <span class="trial-item-icon text-2xl">📅</span>
+        <span>14 Days Trial</span>
+      </div>
+      <div class="trial-item flex items-center space-x-2 text-gray-700">
+        <span class="trial-item-icon text-2xl">✨</span>
+        <span>All Features Included</span>
+      </div>
+    </div>
+
+    <button (click)="goToDashboard()" class="bg-indigo-600 text-white py-4 px-12 rounded-lg font-semibold text-lg">
+      Go to Dashboard →
+    </button>
+  </div>
+</div>

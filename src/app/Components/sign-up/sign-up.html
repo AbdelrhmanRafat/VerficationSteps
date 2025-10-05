@@ -1,0 +1,48 @@
+<div class="container mx-auto max-w-4xl bg-white rounded-2xl shadow-2xl flex min-h-[700px]">
+  <!-- Sidebar -->
+  <div class="sidebar bg-gray-50 p-8 w-1/3 border-r border-gray-200">
+    <div class="logo text-3xl font-bold text-indigo-600 mb-10 flex items-center gap-2">
+      🛍️ Baseet
+    </div>
+    <div class="steps-indicator flex flex-col gap-6">
+      <div *ngFor="let step of steps"
+           class="step-item flex items-center gap-4 transition-all duration-300"
+           [ngClass]="{
+             'active': currentStep() === step.step,
+             'completed': currentStep() > step.step
+           }">
+        <div class="step-number w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300"
+             [ngClass]="{
+               'bg-indigo-600 text-white scale-110': currentStep() === step.step,
+               'bg-green-500 text-white': currentStep() > step.step,
+               'bg-gray-200 text-gray-500': currentStep() < step.step
+             }">
+          <span *ngIf="currentStep() <= step.step">{{ step.step }}</span>
+          <span *ngIf="currentStep() > step.step">✓</span>
+        </div>
+        <div class="step-info">
+          <div class="step-title font-semibold text-sm transition-colors duration-300"
+               [ngClass]="{
+                 'text-gray-800': currentStep() >= step.step,
+                 'text-gray-500': currentStep() < step.step
+               }">
+            {{ step.title }}
+          </div>
+          <div class="step-subtitle text-xs text-gray-400">{{ step.subtitle }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content flex-1 p-10 flex flex-col">
+    <div [ngSwitch]="currentStep()">
+      <app-phone-number *ngSwitchCase="1"></app-phone-number>
+      <app-verification *ngSwitchCase="2"></app-verification>
+      <app-account-setup *ngSwitchCase="3"></app-account-setup>
+      <app-store-details *ngSwitchCase="4"></app-store-details>
+      <app-theme-selection *ngSwitchCase="5"></app-theme-selection>
+      <app-success *ngSwitchCase="6"></app-success>
+    </div>
+  </div>
+</div>
