@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Baseet Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 40px 30px;
+            width: 280px;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: "🛍️";
+            font-size: 32px;
+        }
+
+        .steps-indicator {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-number {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step-item.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-item.completed .step-number::after {
+            content: "✓";
+            font-size: 16px;
+        }
+
+        .step-item.completed .step-number span {
+            display: none;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6c757d;
+            margin-bottom: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .step-item.active .step-title,
+        .step-item.completed .step-title {
+            color: #212529;
+        }
+
+        .step-subtitle {
+            font-size: 12px;
+            color: #adb5bd;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-header {
+            margin-bottom: 32px;
+        }
+
+        .step-header h2 {
+            font-size: 28px;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .step-header p {
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .country-phone {
+            display: flex;
+            gap: 12px;
+        }
+
+        .country-phone select {
+            width: 140px;
+        }
+
+        .otp-inputs {
+            display: flex;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .resend-otp {
+            text-align: center;
+            margin-top: 16px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .resend-otp a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .password-requirements {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .file-upload-content {
+            text-align: center;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .theme-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .theme-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .theme-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .theme-card.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(45deg, #e9ecef 25%, #f8f9fa 25%, #f8f9fa 50%, #e9ecef 50%, #e9ecef 75%, #f8f9fa 75%, #f8f9fa);
+            background-size: 20px 20px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .theme-name {
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+            color: white;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-title {
+            font-size: 32px;
+            color: #212529;
+            margin-bottom: 16px;
+        }
+
+        .success-message {
+            color: #6c757d;
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .store-url {
+            background: #f8f9fa;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .trial-info {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .trial-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #495057;
+        }
+
+        .trial-item-icon {
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 24px;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .steps-indicator {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 16px;
+            }
+
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+                min-width: 80px;
+            }
+
+            .step-subtitle {
+                display: none;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .country-phone {
+                flex-direction: column;
+            }
+
+            .country-phone select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">Baseet</div>
+            <div class="steps-indicator">
+                <div class="step-item active" data-step="1">
+                    <div class="step-number"><span>1</span></div>
+                    <div class="step-info">
+                        <div class="step-title">Phone Number</div>
+                        <div class="step-subtitle">Verify your identity</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-number"><span>2</span></div>
+                    <div class="step-info">
+                        <div class="step-title">Verification</div>
+                        <div class="step-subtitle">Enter OTP code</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-number"><span>3</span></div>
+                    <div class="step-info">
+                        <div class="step-title">Account Setup</div>
+                        <div class="step-subtitle">Email & password</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="4">
+                    <div class="step-number"><span>4</span></div>
+                    <div class="step-info">
+                        <div class="step-title">Store Details</div>
+                        <div class="step-subtitle">Name & branding</div>
+                    </div>
+                </div>
+                <div class="step-item" data-step="5">
+                    <div class="step-number"><span>5</span></div>
+                    <div class="step-info">
+                        <div class="step-title">Choose Theme</div>
+                        <div class="step-subtitle">Select design</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Step 1: Phone Number -->
+            <div class="step-content active" id="step-1">
+                <div class="step-header">
+                    <h2>Welcome to Baseet! 👋</h2>
+                    <p>Let's start by verifying your phone number</p>
+                </div>
+                <div class="form-group">
+                    <label>Country & Phone Number</label>
+                    <div class="country-phone">
+                        <select id="country">
+                            <option value="+20">🇪🇬 Egypt (+20)</option>
+                            <option value="+966">🇸🇦 Saudi (+966)</option>
+                            <option value="+971">🇦🇪 UAE (+971)</option>
+                            <option value="+965">🇰🇼 Kuwait (+965)</option>
+                            <option value="+974">🇶🇦 Qatar (+974)</option>
+                        </select>
+                        <input type="tel" placeholder="Enter your phone number" id="phone">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="nextStep()">Send Verification Code</button>
+                </div>
+            </div>
+
+            <!-- Step 2: OTP Verification -->
+            <div class="step-content" id="step-2">
+                <div class="step-header">
+                    <h2>Verify Your Number 🔐</h2>
+                    <p>We've sent a 6-digit code to your phone</p>
+                </div>
+                <div class="otp-inputs">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                </div>
+                <div class="resend-otp">
+                    Didn't receive the code? <a href="#">Resend in 30s</a>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Verify Code</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Email & Password -->
+            <div class="step-content" id="step-3">
+                <div class="step-header">
+                    <h2>Create Your Account 📧</h2>
+                    <p>Set up your email and password for secure access</p>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="your@email.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Create a password">
+                        <div class="password-requirements">Minimum 6 characters</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Confirm password">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Store Information -->
+            <div class="step-content" id="step-4">
+                <div class="step-header">
+                    <h2>Tell Us About Your Store 🏪</h2>
+                    <p>Let's personalize your store with your brand details</p>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Store Name (Arabic)</label>
+                        <input type="text" placeholder="اسم المتجر" dir="rtl">
+                    </div>
+                    <div class="form-group">
+                        <label>Store Name (English)</label>
+                        <input type="text" placeholder="Store name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Business Sector</label>
+                    <select>
+                        <option>Select your industry</option>
+                        <option>👗 Fashion & Apparel</option>
+                        <option>📱 Electronics & Tech</option>
+                        <option>🍔 Food & Beverages</option>
+                        <option>💄 Beauty & Cosmetics</option>
+                        <option>🏠 Home & Living</option>
+                        <option>⚽ Sports & Outdoors</option>
+                        <option>📚 Books & Stationery</option>
+                        <option>🎁 Gifts & Crafts</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Store Logo</label>
+                    <div class="file-upload">
+                        <input type="file" accept="image/*">
+                        <div class="file-upload-label">
+                            <div class="file-upload-content">
+                                <div class="upload-icon">📷</div>
+                                <div>Click to upload logo</div>
+                                <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">PNG, JPG up to 2MB</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Choose Theme</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Theme Selection -->
+            <div class="step-content" id="step-5">
+                <div class="step-header">
+                    <h2>Choose Your Store Theme 🎨</h2>
+                    <p>Select a design that matches your brand style</p>
+                </div>
+                <div class="theme-selector">
+                    <div class="theme-card selected">
+                        <div class="theme-preview">🛍️</div>
+                        <div class="theme-name">Modern Shop</div>
+                    </div>
+                    <div class="theme-card">
+                        <div class="theme-preview">✨</div>
+                        <div class="theme-name">Elegant</div>
+                    </div>
+                    <div class="theme-card">
+                        <div class="theme-preview">🎯</div>
+                        <div class="theme-name">Minimal</div>
+                    </div>
+                    <div class="theme-card">
+                        <div class="theme-preview">🌈</div>
+                        <div class="theme-name">Colorful</div>
+                    </div>
+                    <div class="theme-card">
+                        <div class="theme-preview">💼</div>
+                        <div class="theme-name">Professional</div>
+                    </div>
+                    <div class="theme-card">
+                        <div class="theme-preview">🎨</div>
+                        <div class="theme-name">Creative</div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn btn-primary" onclick="completeSetup()">Create My Store</button>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="step-content" id="step-success">
+                <div class="success-container">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">Congratulations! 🎉</h2>
+                    <p class="success-message">Your store has been created successfully</p>
+                    
+                    <div class="store-url">yourstore.baseet.store</div>
+                    
+                    <div class="trial-info">
+                        <div class="trial-item">
+                            <span class="trial-item-icon">📦</span>
+                            <span>500 Orders</span>
+                        </div>
+                        <div class="trial-item">
+                            <span class="trial-item-icon">📅</span>
+                            <span>14 Days Trial</span>
+                        </div>
+                        <div class="trial-item">
+                            <span class="trial-item-icon">✨</span>
+                            <span>All Features Included</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: auto; padding: 16px 48px; font-size: 18px;">
+                        Go to Dashboard →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme card selection
+            document.querySelectorAll('.theme-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // OTP input auto-focus
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+
+            // Step indicator clicks
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const step = parseInt(this.dataset.step);
+                    // Only allow going to completed steps
+                    if (this.classList.contains('completed')) {
+                        goToStep(step);
+                    }
+                });
+            });
+        });
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // Mark current step as completed
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('completed');
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+                
+                currentStep++;
+                goToStep(currentStep);
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep--;
+                goToStep(currentStep);
+            }
+        }
+
+        function goToStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show target step
+            document.getElementById(`step-${step}`).classList.add('active');
+
+            // Update sidebar indicators
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.step-item[data-step="${step}"]`).classList.add('active');
+
+            currentStep = step;
+        }
+
+        function completeSetup() {
+            // Mark last step as completed
+            document.querySelector(`.step-item[data-step="${currentStep}"]`).classList.add('completed');
+            
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show success screen
+            document.getElementById('step-success').classList.add('active');
+        }
+    </script>
+</body>
+</html>
